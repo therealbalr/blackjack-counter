@@ -4,7 +4,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>Blackjack Pro - Polished</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com">
+
+function updateBankroll() {
+  const decks = parseInt(document.getElementById('deckCount').value);
+  const remaining = Math.max((decks * 52 - cardsSeen) / 52, 1);
+  const trueCount = runningCount / remaining;
+  const bankroll = parseFloat(document.getElementById('bankroll').value || 0);
+  const unit = bankroll * 0.01;
+  const recommendedBet = trueCount < 1 ? 0 : Math.round((trueCount - 1) * unit);
+
+  document.getElementById('betSuggestion').textContent = `$${recommendedBet}`;
+}
+
+</script>
 </head>
 <body class="bg-gradient-to-br from-black via-gray-900 to-black text-white min-h-screen px-4 py-6 font-sans">
   <header class="text-center mb-10">
@@ -14,7 +27,29 @@
 
   <main class="max-w-5xl mx-auto space-y-8">
     <!-- Deck Layout -->
-    <section class="bg-gray-800 p-4 rounded shadow hidden">
+    
+<section class="bg-gray-800 p-4 rounded shadow text-lg">
+  <h2 class="text-xl font-semibold mb-2">💰 Bankroll Management</h2>
+  <div class="flex items-center gap-4 mb-2">
+    <label>Starting Bankroll ($):</label>
+    <input type="number" id="bankroll" value="1000" class="bg-gray-700 text-white p-2 w-28 rounded" />
+    <button onclick="resetBankroll()" class="bg-red-600 px-3 py-1 rounded hover:bg-red-700">Reset</button>
+  </div>
+  <p class="mt-2 text-lg">📊 Recommended Bet: <span id="betSuggestion">$0</span></p>
+</section>
+
+
+<section class="bg-gray-800 p-4 rounded shadow text-lg">
+  <h2 class="text-xl font-semibold mb-2">📈 Real-Time Count Chart</h2>
+  <canvas id="countChart" height="100"></canvas>
+</section>
+
+<section class="bg-gray-800 p-4 rounded shadow text-lg">
+  <h2 class="text-xl font-semibold mb-2">🧾 Count History Log</h2>
+  <ul id="historyLog" class="list-disc pl-6 space-y-1 text-sm text-gray-300"></ul>
+</section>
+
+<section class="bg-gray-800 p-4 rounded shadow hidden">
       <h2 class="text-xl font-semibold mb-4">🃏 Full Deck - Click a Card</h2>
       <div class="grid grid-cols-13 gap-2">
         <!-- Generate cards with JS -->
@@ -37,7 +72,7 @@
   
     
 
-<section class="bg-gray-800 p-4 rounded shadow">
+<section class="bg-gray-800 p-4 rounded shadow hidden">
   <h2 class="text-xl font-semibold mb-4">✍️ Enter Player and Dealer Cards</h2>
   <div class="flex flex-col sm:flex-row gap-4 mb-4">
     <div>
@@ -52,6 +87,28 @@
   <button onclick="manualRegister()" class="bg-green-600 px-4 py-2 rounded hover:bg-green-700">Submit Hand</button>
 </section>
 
+
+<section class="bg-gray-800 p-4 rounded shadow text-lg">
+  <h2 class="text-xl font-semibold mb-2">💰 Bankroll Management</h2>
+  <div class="flex items-center gap-4 mb-2">
+    <label>Starting Bankroll ($):</label>
+    <input type="number" id="bankroll" value="1000" class="bg-gray-700 text-white p-2 w-28 rounded" />
+    <button onclick="resetBankroll()" class="bg-red-600 px-3 py-1 rounded hover:bg-red-700">Reset</button>
+  </div>
+  <p class="mt-2 text-lg">📊 Recommended Bet: <span id="betSuggestion">$0</span></p>
+</section>
+
+
+<section class="bg-gray-800 p-4 rounded shadow text-lg">
+  <h2 class="text-xl font-semibold mb-2">📈 Real-Time Count Chart</h2>
+  <canvas id="countChart" height="100"></canvas>
+</section>
+
+<section class="bg-gray-800 p-4 rounded shadow text-lg">
+  <h2 class="text-xl font-semibold mb-2">🧾 Count History Log</h2>
+  <ul id="historyLog" class="list-disc pl-6 space-y-1 text-sm text-gray-300"></ul>
+</section>
+
 <section class="bg-gray-800 p-4 rounded shadow hidden">
   <h2 class="text-xl font-semibold mb-4">🎴 Select Card to Add</h2>
   <div class="flex flex-wrap gap-2">
@@ -62,14 +119,14 @@
 </section>
 
 <!-- Visual Player/Dealer Hands -->
-    <section class="bg-gray-800 p-4 rounded shadow text-lg space-y-2">
+    <section class="bg-gray-800 p-4 rounded shadow hidden">
       <h2 class="text-xl font-semibold">🃏 Hand Visualizer</h2>
-      <p>Player Hand: <span id="playerHandCards" class="inline-flex gap-2"></span></p>
-      <p>Dealer Hand: <span id="dealerHandCards" class="inline-flex gap-2"></span></p>
+      
+      
     </section>
 
     <!-- AI Hint Section -->
-    <section class="bg-gray-800 p-4 rounded shadow text-lg space-y-2">
+    <section class="bg-gray-800 p-4 rounded shadow hidden">
       <h2 class="text-xl font-semibold">🤖 AI Hint Engine</h2>
       <button onclick="getAIHint()" class="bg-indigo-600 px-4 py-2 rounded hover:bg-indigo-700">Get AI Hint</button>
       <p class="mt-2">Advice: <span id="aiHintText">-</span></p>
@@ -155,7 +212,16 @@ let dealerHand = [];
       document.getElementById('aiHintText').innerText = hint;
     }
 
-    function updateDisplay() {
+    
+function resetBankroll() {
+  updateDisplay();
+}
+
+
+function updateDisplay() {
+  const logNeeded = cardsSeen > 0;
+
+  updateBankroll();
 
       const decks = parseInt(document.getElementById('deckCount').value);
       const totalCards = decks * 52;
@@ -165,6 +231,7 @@ let dealerHand = [];
       document.getElementById('runningCount').innerText = runningCount;
       document.getElementById('cardsSeen').innerText = cardsSeen;
       document.getElementById('trueCount').innerText = trueCount.toFixed(2);
+  if(logNeeded) logHistory(runningCount, trueCount);
     }
 
     function resetAll() {
@@ -199,6 +266,67 @@ function createDeckUI() {
     }
 
     createDeckUI();
-  </script>
+  
+
+function updateBankroll() {
+  const decks = parseInt(document.getElementById('deckCount').value);
+  const remaining = Math.max((decks * 52 - cardsSeen) / 52, 1);
+  const trueCount = runningCount / remaining;
+  const bankroll = parseFloat(document.getElementById('bankroll').value || 0);
+  const unit = bankroll * 0.01;
+  const recommendedBet = trueCount < 1 ? 0 : Math.round((trueCount - 1) * unit);
+
+  document.getElementById('betSuggestion').textContent = `$${recommendedBet}`;
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let countHistory = [];
+const ctx = document.getElementById('countChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: 'Running Count',
+        data: [],
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 2,
+        fill: false
+      },
+      {
+        label: 'True Count',
+        data: [],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 2,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+function logHistory(running, trueCount) {
+  const log = document.getElementById("historyLog");
+  const entry = document.createElement("li");
+  entry.textContent = `Hand ${countHistory.length + 1}: Running = ${running}, True = ${trueCount.toFixed(2)}`;
+  log.appendChild(entry);
+
+  countHistory.push({ running, trueCount });
+
+  chart.data.labels.push(countHistory.length.toString());
+  chart.data.datasets[0].data.push(running);
+  chart.data.datasets[1].data.push(trueCount);
+  chart.update();
+}
+</script>
+
 </body>
 </html>
