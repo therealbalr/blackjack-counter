@@ -3,27 +3,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Blackjack Pro - Full Deck UI</title>
+  <title>Blackjack Pro - Clickable Deck</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen px-4 py-6">
   <header class="text-center mb-6">
-    <h1 class="text-4xl font-bold">🂡 Blackjack Pro: Full Deck Interface</h1>
-    <p class="text-gray-400 text-lg mt-1">Click cards as they appear to track count and receive optimal strategy advice.</p>
+    <h1 class="text-4xl font-bold">🂡 Blackjack Pro: Clickable Deck Interface</h1>
+    <p class="text-gray-400 text-lg mt-1">Click cards to track running count and improve strategy decisions.</p>
   </header>
 
   <main class="max-w-5xl mx-auto space-y-8">
     <!-- Deck Layout -->
     <section class="bg-gray-800 p-4 rounded shadow">
-      <h2 class="text-xl font-semibold mb-4">🃏 Click Cards to Track</h2>
+      <h2 class="text-xl font-semibold mb-4">🃏 Full Deck - Click a Card</h2>
       <div class="grid grid-cols-13 gap-2">
-        ${["2","3","4","5","6","7","8","9","10","J","Q","K","A"].map(rank => `
-          ${["♠","♥","♣","♦"].map(suit => `
-            <button onclick="registerCard('${rank}')" class="bg-white text-black font-bold rounded shadow w-16 h-20 text-xl hover:scale-105 transition">
-              ${rank}<br><span class="text-sm">${suit}</span>
-            </button>
-          `).join('')}
-        `).join('')}
+        <!-- Generate cards with JS -->
       </div>
     </section>
 
@@ -40,10 +34,29 @@
         <button onclick="resetAll()" class="ml-4 bg-red-600 px-3 py-1 rounded hover:bg-red-700">Reset</button>
       </div>
     </section>
-  </main>
+  
+    <!-- Visual Player/Dealer Hands -->
+    <section class="bg-gray-800 p-4 rounded shadow text-lg space-y-2">
+      <h2 class="text-xl font-semibold">🃏 Hand Visualizer</h2>
+      <p>Player Hand: <span id="playerHandCards" class="inline-flex gap-2"></span></p>
+      <p>Dealer Hand: <span id="dealerHandCards" class="inline-flex gap-2"></span></p>
+    </section>
+
+    <!-- AI Hint Section -->
+    <section class="bg-gray-800 p-4 rounded shadow text-lg space-y-2">
+      <h2 class="text-xl font-semibold">🤖 AI Hint Engine</h2>
+      <button onclick="getAIHint()" class="bg-indigo-600 px-4 py-2 rounded hover:bg-indigo-700">Get AI Hint</button>
+      <p class="mt-2">Advice: <span id="aiHintText">-</span></p>
+    </section>
+    </main>
+    
 
   <script>
+    const suits = ['♠','♥','♣','♦'];
+    const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
     let runningCount = 0;
+let playerHand = [];
+let dealerHand = [];
     let cardsSeen = 0;
 
     const cardValues = {
@@ -52,7 +65,16 @@
       '10': -1, 'J': -1, 'Q': -1, 'K': -1, 'A': -1
     };
 
+    
     function registerCard(rank) {
+      if (playerHand.length < 2) {
+        playerHand.push(rank);
+        updateHandDisplay();
+      } else if (dealerHand.length < 1) {
+        dealerHand.push(rank);
+        updateHandDisplay();
+      }
+
       if (cardValues.hasOwnProperty(rank)) {
         runningCount += cardValues[rank];
         cardsSeen++;
@@ -60,7 +82,41 @@
       }
     }
 
+    
+    function updateHandDisplay() {
+      const pContainer = document.getElementById('playerHandCards');
+      const dContainer = document.getElementById('dealerHandCards');
+      pContainer.innerHTML = '';
+      dContainer.innerHTML = '';
+      playerHand.forEach(rank => {
+        const el = document.createElement('div');
+        el.className = 'bg-white text-black px-2 py-1 rounded shadow';
+        el.innerText = rank;
+        pContainer.appendChild(el);
+      });
+      dealerHand.forEach(rank => {
+        const el = document.createElement('div');
+        el.className = 'bg-white text-black px-2 py-1 rounded shadow';
+        el.innerText = rank;
+        dContainer.appendChild(el);
+      });
+    }
+
+    function getAIHint() {
+      const running = runningCount;
+      const decks = parseInt(document.getElementById('deckCount').value);
+      const trueCount = (running / Math.max((decks * 52 - cardsSeen) / 52, 1)).toFixed(2);
+      let hint = 'Play carefully';
+      if (trueCount >= 5) hint = '🔥 High count! Increase bet and stand more';
+      else if (trueCount >= 3) hint = '🟢 Advantageous deck — play aggressively';
+      else if (trueCount >= 1) hint = '🟡 Small edge — stick to basic strategy';
+      else hint = '🔴 Negative count — minimize bets or sit out';
+
+      document.getElementById('aiHintText').innerText = hint;
+    }
+
     function updateDisplay() {
+
       const decks = parseInt(document.getElementById('deckCount').value);
       const totalCards = decks * 52;
       const remainingDecks = Math.max((totalCards - cardsSeen) / 52, 1);
@@ -76,6 +132,21 @@
       cardsSeen = 0;
       updateDisplay();
     }
+
+    function createDeckUI() {
+      const container = document.querySelector(".grid");
+      ranks.forEach(rank => {
+        suits.forEach(suit => {
+          const btn = document.createElement("button");
+          btn.className = "bg-white text-black font-bold rounded shadow w-16 h-20 text-xl hover:scale-105 transition";
+          btn.innerHTML = `${rank}<br><span class="text-sm">${suit}</span>`;
+          btn.onclick = () => registerCard(rank);
+          container.appendChild(btn);
+        });
+      });
+    }
+
+    createDeckUI();
   </script>
 </body>
 </html>

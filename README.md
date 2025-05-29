@@ -1,25 +1,24 @@
-# 🃏 Blackjack Pro – Full Deck Version
+# 🃏 Blackjack Pro – Enhanced Edition
 
-This version features a complete 52-card layout and professional design, ideal for card counting practice and tracking.
+This enhanced version includes:
+- ✅ Full deck with suits and click-to-count cards
+- 👁️ Visual display of Player & Dealer hands
+- 🧠 AI Hint Engine based on true count
+- 📈 Live count tracking (Running, Seen, True)
+- 🎨 Styled UI with TailwindCSS
+- 🌐 Fully GitHub Pages–ready
 
-## ✅ Features
+## 🚀 How to Deploy on GitHub Pages
 
-- ♠♥♣♦ Full deck layout with suits
-- 🔢 Running Count, Cards Seen, and True Count
-- 🖱 Click-based card selection
-- 🎨 Professionally styled with TailwindCSS
-- 🌐 GitHub Pages–ready deployment
-
-## 🚀 How to Use
-
-1. Open `index.html` in any browser
-2. Click on cards as they are dealt
-3. Use the true count for strategic advantage
-
-## 🌍 Deploy on GitHub Pages
-
-1. Create a new GitHub repo (e.g., `blackjack-pro-deck`)
-2. Upload both `index.html` and `README.md`
+1. Create a GitHub repo (e.g., `blackjack-pro-enhanced`)
+2. Upload these files: `index.html` and `README.md`
 3. Go to **Settings > Pages**
-4. Set source to `main` branch and `/root`
-5. Your site will be live at `https://yourusername.github.io/blackjack-pro-deck/`
+4. Select:
+   - Branch: `main`
+   - Folder: `/ (root)`
+5. Visit your app at:
+   ```
+   https://yourusername.github.io/blackjack-pro-enhanced/
+   ```
+
+Enjoy your edge at the tables! 🎯
