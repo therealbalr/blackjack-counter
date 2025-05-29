@@ -1,19 +1,28 @@
-# Blackjack Counter (Web Version)
+# 🃏 Blackjack Counter Web App
 
-🃏 A browser-based Blackjack Card Counter with Hi-Lo strategy and true count.  
-💡 Includes dark/light mode and clickable card input.
+This is a full-featured browser-based Blackjack tool that includes:
 
-## How to Use
+- 🔢 **Live running + true count**
+- 🧠 **Advanced play advice** (based on true count and basic strategy)
+- 🌈 **Heatmap legend** for visual guidance on suggested moves
+- 🖱️ Clickable card input for easy use
+- ⚙️ Deck selector and game reset
+
+## ✅ How to Use
 
 1. Open `index.html` in any browser.
-2. Click the cards as they appear in the game.
-3. Read the running count, true count, and betting suggestion.
-4. Click the 🌗 button to switch between dark and light mode.
+2. Click cards as they’re dealt to track count.
+3. Select player hand and dealer card.
+4. Get your recommended move based on both strategy and card count.
 
-## Hosting with GitHub Pages
+## 🌐 Hosting on GitHub Pages
 
-1. Create a GitHub repo and upload this `index.html` file.
-2. Go to Settings → Pages → Select branch → Save.
-3. Your Blackjack counter will be online!
+1. Create a repository (e.g., `blackjack-counter`).
+2. Upload this folder's contents.
+3. Go to **Settings > Pages** → choose the `main` branch and `/root` directory.
+4. Access your live app at:
+   ```
+   https://yourusername.github.io/blackjack-counter/
+   ```
 
-Enjoy counting responsibly 🎲
+Enjoy your edge at the tables! 🎲
