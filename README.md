@@ -1,28 +1,29 @@
-# 🃏 Blackjack Counter Web App
+# 🎯 Pro Blackjack Suite (Animated)
 
-This is a full-featured browser-based Blackjack tool that includes:
+This is a professional, animated Blackjack strategy tool built for web.
 
-- 🔢 **Live running + true count**
-- 🧠 **Advanced play advice** (based on true count and basic strategy)
-- 🌈 **Heatmap legend** for visual guidance on suggested moves
-- 🖱️ Clickable card input for easy use
-- ⚙️ Deck selector and game reset
+## 🧩 Features
 
-## ✅ How to Use
+- 🧮 Live running and true count tracker
+- 🎯 Advanced play advice with auto-reset
+- 📊 Basic strategy grid (color-coded)
+- 💰 Bankroll-based betting suggestion
+- ✨ Smooth animations using TailwindCSS
+- 🌐 GitHub Pages–ready
 
-1. Open `index.html` in any browser.
-2. Click cards as they’re dealt to track count.
-3. Select player hand and dealer card.
-4. Get your recommended move based on both strategy and card count.
+## 🚀 How to Use
 
-## 🌐 Hosting on GitHub Pages
+1. Open `index.html` in any browser
+2. Select player hand and dealer card
+3. Track cards as they're dealt
+4. Read play advice and update your count
 
-1. Create a repository (e.g., `blackjack-counter`).
-2. Upload this folder's contents.
-3. Go to **Settings > Pages** → choose the `main` branch and `/root` directory.
-4. Access your live app at:
-   ```
-   https://yourusername.github.io/blackjack-counter/
-   ```
+## 🌍 Deploy on GitHub Pages
 
-Enjoy your edge at the tables! 🎲
+1. Create a repo on GitHub (e.g., `blackjack-pro`)
+2. Upload `index.html` and `README.md`
+3. Go to **Settings > Pages**
+4. Choose:
+   - Source: `main`
+   - Folder: `/ (root)`
+5. Visit your live app at `https://yourusername.github.io/blackjack-pro/`

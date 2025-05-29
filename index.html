@@ -2,251 +2,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Blackjack Advisor + Live Count + Heatmap</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #111;
-      color: #fff;
-      padding: 2em;
-      max-width: 800px;
-      margin: auto;
-    }
-    .section {
-      margin-bottom: 1.5em;
-    }
-    button {
-      margin: 0.3em;
-      padding: 0.5em 1em;
-      font-size: 1em;
-      background-color: #444;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #666;
-    }
-    input {
-      background-color: #222;
-      color: #fff;
-      padding: 0.4em;
-      width: 60px;
-      border: 1px solid #444;
-    }
-    .heatmap {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 320px;
-      gap: 4px;
-    }
-    .heatbox {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: bold;
-    }
-    .green { background-color: #2ecc71; }
-    .yellow { background-color: #f1c40f; }
-    .orange { background-color: #e67e22; }
-    .red { background-color: #e74c3c; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro Blackjack Suite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h2>🧠 Blackjack Advisor + Live Count + Heatmap</h2>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center px-4 py-6">
+  <header class="text-center mb-6">
+    <h1 class="text-4xl font-bold mb-1">♠️ Pro Blackjack Suite</h1>
+    <p class="text-gray-400 text-lg">Track. Train. Win. A full blackjack counting and strategy trainer.</p>
+  </header>
 
-  <div class="section">
-    <h4>1️⃣ Select Player Cards:</h4>
-    <div id="player-cards"></div>
-    <div>
-      <button onclick="addCardToHand('2')">2</button>
-      <button onclick="addCardToHand('3')">3</button>
-      <button onclick="addCardToHand('4')">4</button>
-      <button onclick="addCardToHand('5')">5</button>
-      <button onclick="addCardToHand('6')">6</button>
-      <button onclick="addCardToHand('7')">7</button>
-      <button onclick="addCardToHand('8')">8</button>
-      <button onclick="addCardToHand('9')">9</button>
-      <button onclick="addCardToHand('10')">10</button>
-      <button onclick="addCardToHand('J')">J</button>
-      <button onclick="addCardToHand('Q')">Q</button>
-      <button onclick="addCardToHand('K')">K</button>
-      <button onclick="addCardToHand('A')">A</button>
-    </div>
-  </div>
+  <main class="w-full max-w-5xl space-y-8">
 
-  <div class="section">
-    <h4>2️⃣ Select Dealer Upcard:</h4>
-    <div>
-      <button onclick="setDealerCard('2')">2</button>
-      <button onclick="setDealerCard('3')">3</button>
-      <button onclick="setDealerCard('4')">4</button>
-      <button onclick="setDealerCard('5')">5</button>
-      <button onclick="setDealerCard('6')">6</button>
-      <button onclick="setDealerCard('7')">7</button>
-      <button onclick="setDealerCard('8')">8</button>
-      <button onclick="setDealerCard('9')">9</button>
-      <button onclick="setDealerCard('10')">10</button>
-      <button onclick="setDealerCard('J')">J</button>
-      <button onclick="setDealerCard('Q')">Q</button>
-      <button onclick="setDealerCard('K')">K</button>
-      <button onclick="setDealerCard('A')">A</button>
-    </div>
-    <p>Dealer card: <span id="dealer-card">none</span></p>
-  </div>
+    <!-- Bankroll Tracking -->
+    <section class="bg-gray-800 p-4 rounded shadow">
+      <h2 class="text-xl font-semibold mb-2">💰 Bankroll Manager</h2>
+      <div class="flex items-center gap-4">
+        <label>Initial Bankroll ($):</label>
+        <input type="number" id="bankroll" value="1000" class="bg-gray-700 p-2 w-24 rounded" />
+        <button onclick="resetBankroll()" class="bg-red-600 px-3 py-1 rounded hover:bg-red-700">Reset</button>
+      </div>
+      <p class="mt-2 text-lg">Recommended Bet: <span id="betSuggestion">$0</span></p>
+    </section>
 
-  <div class="section">
-    <h4>3️⃣ Live Count Tracking:</h4>
-    <div>
-      <p>Click cards as dealt:</p>
-      <button onclick="registerCard('2')">2</button>
-      <button onclick="registerCard('3')">3</button>
-      <button onclick="registerCard('4')">4</button>
-      <button onclick="registerCard('5')">5</button>
-      <button onclick="registerCard('6')">6</button>
-      <button onclick="registerCard('7')">7</button>
-      <button onclick="registerCard('8')">8</button>
-      <button onclick="registerCard('9')">9</button>
-      <button onclick="registerCard('10')">10</button>
-      <button onclick="registerCard('J')">J</button>
-      <button onclick="registerCard('Q')">Q</button>
-      <button onclick="registerCard('K')">K</button>
-      <button onclick="registerCard('A')">A</button>
-    </div>
-    <label>Decks: <input type="number" id="deckCount" value="6" min="1" step="1" onchange="updateDisplay()" /></label>
-    <button onclick="resetAll()">🔄 Reset All</button>
-    <div class="result">
-      <p id="cardsSeen">Cards Seen: 0</p>
-      <p id="runningCount">Running Count: 0</p>
-      <p id="trueCount">True Count: 0.00</p>
-    </div>
-  </div>
+    <!-- Card Input and Count Tracking -->
+    <section class="bg-gray-800 p-4 rounded shadow">
+      <h2 class="text-xl font-semibold mb-2">🧮 Card Tracker</h2>
+      <div class="mb-2 flex flex-wrap gap-2">
+        ${['2','3','4','5','6','7','8','9','10','J','Q','K','A'].map(c => `<button onclick="registerCard('${c}')" class="bg-blue-600 px-3 py-1 rounded">${c}</button>`).join('')}
+      </div>
+      <div class="flex items-center gap-4">
+        <label>Decks in play:</label>
+        <input type="number" id="deckCount" value="6" min="1" class="bg-gray-700 p-2 w-20 rounded" onchange="updateDisplay()" />
+        <button onclick="resetAll()" class="bg-red-600 px-3 py-1 rounded hover:bg-red-700">Reset</button>
+      </div>
+      <div class="mt-2 space-y-1">
+        <p id="cardsSeen">Cards Seen: 0</p>
+        <p id="runningCount">Running Count: 0</p>
+        <p id="trueCount">True Count: 0.00</p>
+      </div>
+    </section>
 
-  <div class="section">
-    <button onclick="getAdvice()">🔍 Get Advice</button>
-    <div class="result">
-      <p id="hand-total">Player total: 0</p>
-      <p id="advice">Recommended move: -</p>
-    </div>
-  </div>
+    <!-- Strategy Grid -->
+    <section class="bg-gray-800 p-4 rounded shadow">
+      <h2 class="text-xl font-semibold mb-2">📊 Strategy Grid (Basic)</h2>
+      <p class="text-sm text-gray-300 mb-2">Note: This is a simplified representation.</p>
+      <div class="overflow-auto">
+        <table class="table-auto text-sm border border-gray-700 w-full">
+          <thead><tr><th class="p-2 border">Your Total</th>${[2,3,4,5,6,7,8,9,10,'A'].map(n => `<th class="p-2 border">${n}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${[12,13,14,15,16,17,18,19,20].map(row => `
+              <tr>
+                <td class="p-2 border font-bold">${row}</td>
+                ${[2,3,4,5,6,7,8,9,10,11].map(dealer => {
+                  let move = row >= 17 ? 'S' : (row <= 11 || dealer >= 7 ? 'H' : 'S');
+                  return `<td class="p-2 border text-center ${move === 'H' ? 'text-yellow-300' : 'text-green-300'}">${move}</td>`;
+                }).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-  <div class="section">
-    <h4>4️⃣ Heatmap Guide (TC Impact):</h4>
-    <div class="heatmap">
-      <div class="heatbox green">Stand</div>
-      <div class="heatbox yellow">Hit</div>
-      <div class="heatbox orange">Double</div>
-      <div class="heatbox red">Split</div>
-    </div>
-  </div>
+    <!-- Player Decision Advisor -->
+    <section class="bg-gray-800 p-4 rounded shadow">
+      <h2 class="text-xl font-semibold mb-2">🎯 Play Decision Advisor</h2>
+      <div class="flex flex-wrap gap-2 mb-2">
+        ${['2','3','4','5','6','7','8','9','10','J','Q','K','A'].map(c => `<button onclick="addPlayerCard('${c}')" class="bg-indigo-600 px-3 py-1 rounded">${c}</button>`).join('')}
+      </div>
+      <p>Player Hand: <span id="playerHand" class="font-mono">[]</span></p>
+      <div class="flex flex-wrap gap-2 mt-2">
+        ${['2','3','4','5','6','7','8','9','10','J','Q','K','A'].map(c => `<button onclick="setDealerCard('${c}')" class="bg-purple-600 px-3 py-1 rounded">${c}</button>`).join('')}
+      </div>
+      <p>Dealer Card: <span id="dealerCard" class="font-mono">-</span></p>
+      <button onclick="getAdvice()" class="mt-2 bg-green-600 px-4 py-2 rounded hover:bg-green-700 font-bold text-lg">Get Advice</button>
+      <p class="mt-2 text-lg">Advice: <span id="adviceText" class="transition-transform duration-300 ease-in-out transform scale-110 text-green-400">-</span></p>
+    </section>
+
+  </main>
 
   <script>
-    let playerCards = [];
-    let dealerCard = null;
     let runningCount = 0;
     let cardsSeen = 0;
-
-    const cardValues = {
-      '2': 1, '3': 1, '4': 1, '5': 1, '6': 1,
-      '7': 0, '8': 0, '9': 0,
-      '10': -1, 'J': -1, 'Q': -1, 'K': -1, 'A': -1
-    };
-
-    function addCardToHand(card) {
-      playerCards.push(card);
-      document.getElementById('player-cards').innerText = "Hand: " + playerCards.join(', ');
-    }
-
-    function setDealerCard(card) {
-      dealerCard = card;
-      document.getElementById('dealer-card').innerText = card;
-    }
-
-    function resetAll() {
-      playerCards = [];
-      dealerCard = null;
-      runningCount = 0;
-      cardsSeen = 0;
-      document.getElementById('player-cards').innerText = "Hand: ";
-      document.getElementById('dealer-card').innerText = "none";
-      document.getElementById('cardsSeen').innerText = "Cards Seen: 0";
-      document.getElementById('runningCount').innerText = "Running Count: 0";
-      document.getElementById('trueCount').innerText = "True Count: 0.00";
-      document.getElementById('hand-total').innerText = "Player total: 0";
-      document.getElementById('advice').innerText = "Recommended move: -";
-    }
-
+    let playerHand = [];
+    let dealerCard = '';
     function registerCard(card) {
-      if (cardValues.hasOwnProperty(card)) {
-        runningCount += cardValues[card];
+      const values = { '2':1,'3':1,'4':1,'5':1,'6':1,'7':0,'8':0,'9':0,'10':-1,'J':-1,'Q':-1,'K':-1,'A':-1 };
+      if (card in values) {
+        runningCount += values[card];
         cardsSeen++;
         updateDisplay();
       }
+    }
+
+    function resetAll() {
+      runningCount = 0;
+      cardsSeen = 0;
+      playerHand = [];
+      dealerCard = '';
+      document.getElementById('playerHand').textContent = '[]';
+      document.getElementById('dealerCard').textContent = '-';
+      updateDisplay();
     }
 
     function updateDisplay() {
       const decks = parseInt(document.getElementById('deckCount').value);
       const totalCards = decks * 52;
       const remainingDecks = Math.max((totalCards - cardsSeen) / 52, 1);
-      const trueCount = (runningCount / remainingDecks).toFixed(2);
+      const trueCount = runningCount / remainingDecks;
+      const bankroll = parseFloat(document.getElementById('bankroll').value);
+      const recommendedBet = trueCount < 1 ? 0 : Math.round((trueCount - 1) * 0.5 * bankroll / 10);
 
-      document.getElementById('cardsSeen').innerText = "Cards Seen: " + cardsSeen;
-      document.getElementById('runningCount').innerText = "Running Count: " + runningCount;
-      document.getElementById('trueCount').innerText = "True Count: " + trueCount;
+      document.getElementById('cardsSeen').textContent = `Cards Seen: ${cardsSeen}`;
+      document.getElementById('runningCount').textContent = `Running Count: ${runningCount}`;
+      document.getElementById('trueCount').textContent = `True Count: ${trueCount.toFixed(2)}`;
+      document.getElementById('betSuggestion').textContent = `$${recommendedBet}`;
     }
 
-    function cardValue(card) {
-      if (['J','Q','K','10'].includes(card)) return 10;
-      if (card === 'A') return 11;
-      return parseInt(card);
+    function resetBankroll() {
+      updateDisplay();
     }
 
-    function getHandValue() {
-      let total = 0;
-      let aces = 0;
-      for (let card of playerCards) {
-        if (card === 'A') aces += 1;
-        total += cardValue(card);
-      }
-      while (total > 21 && aces > 0) {
-        total -= 10;
-        aces -= 1;
-      }
-      return total;
+    function addPlayerCard(card) {
+      playerHand.push(card);
+      document.getElementById('playerHand').textContent = JSON.stringify(playerHand);
+    }
+
+    function setDealerCard(card) {
+      dealerCard = card;
+      document.getElementById('dealerCard').textContent = card;
     }
 
     function getAdvice() {
-      if (playerCards.length < 2 || !dealerCard) {
-        alert("Please select 2 player cards and 1 dealer card.");
-        return;
-      }
+      const getValue = card => ['J','Q','K','10'].includes(card) ? 10 : card === 'A' ? 11 : parseInt(card);
+      let total = 0, aces = 0;
+      playerHand.forEach(card => {
+        total += getValue(card);
+        if (card === 'A') aces++;
+      });
+      while (total > 21 && aces--) total -= 10;
 
-      const total = getHandValue();
-      const dealerVal = cardValue(dealerCard);
-      const decks = parseInt(document.getElementById('deckCount').value);
-      const totalCards = decks * 52;
-      const remainingDecks = Math.max((totalCards - cardsSeen) / 52, 1);
-      const trueCount = runningCount / remainingDecks;
-      let move = 'Stand';
+      let advice = "Stand";
+      if (total <= 11) advice = "Hit";
+      else if (total === 12 && ['4','5','6'].includes(dealerCard)) advice = "Stand";
+      else if (total === 12) advice = "Hit";
+      else if (total >= 13 && total <= 16 && ['2','3','4','5','6'].includes(dealerCard)) advice = "Stand";
+      else if (total >= 13 && total <= 16) advice = "Hit";
+      else if (total >= 17) advice = "Stand";
 
-      if (total <= 11) move = 'Hit';
-      else if (total === 12 && (dealerVal >= 4 && dealerVal <= 6)) move = 'Stand';
-      else if (total === 12) move = 'Hit';
-      else if (total >= 13 && total <= 16 && dealerVal <= 6) move = 'Stand';
-      else if (total >= 13 && total <= 16 && dealerVal >= 7) move = 'Hit';
-      else if (total >= 17) move = 'Stand';
-
-      if (total === 16 && dealerVal === 10 && trueCount >= 0) move = 'Stand';
-      if (total === 15 && dealerVal === 10 && trueCount >= 4) move = 'Stand';
-      if (total === 12 && dealerVal === 3 && trueCount >= 2) move = 'Stand';
-      if (total === 12 && dealerVal === 2 && trueCount >= 3) move = 'Stand';
-
-      document.getElementById('hand-total').innerText = "Player total: " + total;
-      document.getElementById('advice').innerText = "Recommended move: " + move;
+      document.getElementById('adviceText').textContent = advice;
+      // Reset hand after advice
+      playerHand = [];
+      dealerCard = '';
+      document.getElementById('playerHand').textContent = '[]';
+      document.getElementById('dealerCard').textContent = '-';
     }
   </script>
 </body>
