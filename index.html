@@ -3,18 +3,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Blackjack Pro - Clickable Deck</title>
+  <title>Blackjack Pro - Polished</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white min-h-screen px-4 py-6">
-  <header class="text-center mb-6">
-    <h1 class="text-4xl font-bold">🂡 Blackjack Pro: Clickable Deck Interface</h1>
+<body class="bg-gradient-to-br from-black via-gray-900 to-black text-white min-h-screen px-4 py-6 font-sans">
+  <header class="text-center mb-10">
+    <h1 class="text-5xl font-extrabold tracking-wide text-purple-300 drop-shadow">🂡 Blackjack Pro: Clickable Deck Interface</h1>
     <p class="text-gray-400 text-lg mt-1">Click cards to track running count and improve strategy decisions.</p>
   </header>
 
   <main class="max-w-5xl mx-auto space-y-8">
     <!-- Deck Layout -->
-    <section class="bg-gray-800 p-4 rounded shadow">
+    <section class="bg-gray-800 p-4 rounded shadow hidden">
       <h2 class="text-xl font-semibold mb-4">🃏 Full Deck - Click a Card</h2>
       <div class="grid grid-cols-13 gap-2">
         <!-- Generate cards with JS -->
@@ -35,7 +35,17 @@
       </div>
     </section>
   
-    <!-- Visual Player/Dealer Hands -->
+    
+<section class="bg-gray-800 p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">🎴 Select Card to Add</h2>
+  <div class="flex flex-wrap gap-2">
+    ${["2","3","4","5","6","7","8","9","10","J","Q","K","A"].map(rank => `
+      <button class="card-button" onclick="registerCard('${rank}')" class="bg-white text-black px-3 py-2 rounded shadow hover:scale-105 transition">${rank}</button>
+    `).join('')}
+  </div>
+</section>
+
+<!-- Visual Player/Dealer Hands -->
     <section class="bg-gray-800 p-4 rounded shadow text-lg space-y-2">
       <h2 class="text-xl font-semibold">🃏 Hand Visualizer</h2>
       <p>Player Hand: <span id="playerHandCards" class="inline-flex gap-2"></span></p>
@@ -51,7 +61,21 @@
     </main>
     
 
-  <script>
+  
+<style>
+  .card-button {
+    @apply w-12 h-16 bg-white text-black border border-gray-300 rounded-lg shadow-md text-lg font-bold hover:scale-110 transition duration-150 ease-in-out;
+  }
+  .card-flip {
+    animation: flipIn 0.4s ease;
+  }
+  @keyframes flipIn {
+    from { transform: rotateY(90deg); opacity: 0; }
+    to { transform: rotateY(0); opacity: 1; }
+  }
+</style>
+
+<script>
     const suits = ['♠','♥','♣','♦'];
     const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
     let runningCount = 0;
@@ -90,13 +114,13 @@ let dealerHand = [];
       dContainer.innerHTML = '';
       playerHand.forEach(rank => {
         const el = document.createElement('div');
-        el.className = 'bg-white text-black px-2 py-1 rounded shadow';
+        el.className = 'bg-white text-black px-2 py-1 rounded shadow card-flip';
         el.innerText = rank;
         pContainer.appendChild(el);
       });
       dealerHand.forEach(rank => {
         const el = document.createElement('div');
-        el.className = 'bg-white text-black px-2 py-1 rounded shadow';
+        el.className = 'bg-white text-black px-2 py-1 rounded shadow card-flip';
         el.innerText = rank;
         dContainer.appendChild(el);
       });
