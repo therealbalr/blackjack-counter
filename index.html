@@ -39,6 +39,18 @@ function updateBankroll() {
 </section>
 
 
+
+<section class="bg-gray-800 p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">🃏 Click Dealt Cards</h2>
+  <div class="flex flex-wrap gap-2 mb-4">
+    ${["2","3","4","5","6","7","8","9","10","J","Q","K","A"].map(rank => `
+      <button onclick="registerCard('${rank}')" class="bg-white text-black font-bold rounded shadow w-14 h-16 text-lg hover:scale-110 transition">
+        ${rank}
+      </button>
+    `).join('')}
+  </div>
+</section>
+
 <section class="bg-gray-800 p-4 rounded shadow text-lg">
   <h2 class="text-xl font-semibold mb-2">📈 Real-Time Count Chart</h2>
   <canvas id="countChart" height="100"></canvas>
@@ -98,6 +110,18 @@ function updateBankroll() {
   <p class="mt-2 text-lg">📊 Recommended Bet: <span id="betSuggestion">$0</span></p>
 </section>
 
+
+
+<section class="bg-gray-800 p-4 rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">🃏 Click Dealt Cards</h2>
+  <div class="flex flex-wrap gap-2 mb-4">
+    ${["2","3","4","5","6","7","8","9","10","J","Q","K","A"].map(rank => `
+      <button onclick="registerCard('${rank}')" class="bg-white text-black font-bold rounded shadow w-14 h-16 text-lg hover:scale-110 transition">
+        ${rank}
+      </button>
+    `).join('')}
+  </div>
+</section>
 
 <section class="bg-gray-800 p-4 rounded shadow text-lg">
   <h2 class="text-xl font-semibold mb-2">📈 Real-Time Count Chart</h2>
