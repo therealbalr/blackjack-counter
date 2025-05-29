@@ -32,7 +32,7 @@ function selectCard(rank) {
 function confirmCardCount() {
   if (selectedCard) {
     registerCard(selectedCard);
-    selectCard(null); // Reset visual
+    document.getElementById(`btn-${selectedCard}`)?.classList.remove('ring', 'ring-4', 'ring-blue-500');
     selectedCard = null;
   }
 }
@@ -338,7 +338,7 @@ function selectCard(rank) {
 function confirmCardCount() {
   if (selectedCard) {
     registerCard(selectedCard);
-    selectCard(null); // Reset visual
+    document.getElementById(`btn-${selectedCard}`)?.classList.remove('ring', 'ring-4', 'ring-blue-500');
     selectedCard = null;
   }
 }
@@ -360,7 +360,7 @@ function selectCard(rank) {
 function confirmCardCount() {
   if (selectedCard) {
     registerCard(selectedCard);
-    selectCard(null); // Reset visual
+    document.getElementById(`btn-${selectedCard}`)?.classList.remove('ring', 'ring-4', 'ring-blue-500');
     selectedCard = null;
   }
 }
@@ -425,7 +425,7 @@ function selectCard(rank) {
 function confirmCardCount() {
   if (selectedCard) {
     registerCard(selectedCard);
-    selectCard(null); // Reset visual
+    document.getElementById(`btn-${selectedCard}`)?.classList.remove('ring', 'ring-4', 'ring-blue-500');
     selectedCard = null;
   }
 }
